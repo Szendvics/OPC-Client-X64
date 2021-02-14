@@ -196,7 +196,7 @@ void CRemoteHost::getListOfDAServers(CATID cid, std::vector<std::string>& listOf
 			USES_CONVERSION;
 			COLE2T str(progID);
 
-			printf("ProgID: %s ", str);
+			//printf("ProgID: %s ", str);
 
 			printf("CLSID: {%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX}\n",
 				glist.Data1, glist.Data2, glist.Data3,
