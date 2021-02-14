@@ -1,0 +1,7 @@
+include(CMakeFindDependencyMacro)
+
+#find_library(wsock32)
+#find_library(ws2_32)
+#find_library(user32)
+
+include(${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@.cmake)
