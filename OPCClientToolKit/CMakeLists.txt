@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 # === PROJECT ==============================================================
 include(cmakeTargets)
-project(opcClientToolKit C)
+project(opcClientToolKit CXX)
 
 # === CONFIG ===============================================================
 set(PublicHeaderSubDirName libfins)
@@ -35,6 +35,9 @@ set(Headers
 
 set(Sources
     ${SourceLocation}/OPCClient.cpp
+    ${SourceLocation}/opccomn_i.c
+    ${SourceLocation}/opcda_i.c
+    ${SourceLocation}/OpcEnum_i.c
     ${SourceLocation}/OPCGroup.cpp
     ${SourceLocation}/OPCHost.cpp
     ${SourceLocation}/OPCItem.cpp
