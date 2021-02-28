@@ -22,6 +22,7 @@ Boston, MA  02111-1307, USA.
 #include "OPCGroup.h"
 #include "OPCItem.h"
 std::map<DWORD, uintptr_t> transactionPointers;
+std::map<DWORD, uintptr_t> itemPointers;
 
 /**
 * Handles OPC (DCOM) callbacks at the group level. It deals with the receipt of data from asynchronous operations.
@@ -44,7 +45,7 @@ public:
 	}
 
 
-	~CAsynchDataCallback(){
+	virtual ~CAsynchDataCallback(){
 
 	}
 
@@ -174,13 +175,6 @@ public:
 	}
 };
 
-
-
-
-
-
-
-
 COPCGroup::COPCGroup(const std::string & groupName, bool active, unsigned long reqUpdateRate_ms, unsigned long &revisedUpdateRate_ms, float deadBand, COPCServer &server):
 name(groupName),
 opcServer(server)
@@ -211,13 +205,6 @@ opcServer(server)
 		throw OPCException("Failed to get IID_IOPCItemMgt");
 	}
 }
-
-
-
-
-
-
-
 
 COPCGroup::~COPCGroup()
 {
@@ -251,7 +238,8 @@ void COPCGroup::readSync(std::vector<COPCItem *>& items, COPCItem_DataMap & opcD
 	} 
 
 	for (unsigned i = 0; i < noItems; i++){
-		COPCItem * item = (COPCItem *)itemState[i].hClient;
+		COPCItem * item = (COPCItem*)itemPointers[itemState[i].hClient];
+
 		OPCItemData * data = CAsynchDataCallback::makeOPCDataItem(itemState[i].vDataValue, itemState[i].wQuality, itemState[i].ftTimeStamp, itemResult[i]);
 		COPCItem_DataMap::CPair* pair = opcData.Lookup(item);
 		if (pair == NULL){
@@ -334,6 +322,7 @@ COPCItem * COPCGroup::addItem(std::string &itemName, bool active)
 
 
 int COPCGroup::addItems(std::vector<std::string>& itemName, std::vector<COPCItem *>& itemsCreated, std::vector<HRESULT>& errors, bool active){
+	bool isOk = true;
 	itemsCreated.resize(itemName.size());
 	errors.resize(itemName.size());
  	OPCITEMDEF *itemDef = new OPCITEMDEF[itemName.size()];
@@ -347,6 +336,16 @@ int COPCGroup::addItems(std::vector<std::string>& itemName, std::vector<COPCItem
 		itemDef[i].szAccessPath = NULL;//wideName;
 		itemDef[i].bActive = active;
 		itemDef[i].hClient = (DWORD)itemsCreated[i];
+		if(itemPointers.count((DWORD)itemsCreated[i])!=0)
+		{
+			throw OPCException("Failed to add items due to: addItems OPCHANDLE conversion resulted an key collision!");
+			isOk = false;
+		}
+		else
+		{
+			itemPointers[(DWORD)itemsCreated[i]] = (uintptr_t)itemsCreated[i];
+		}
+
 		itemDef[i].dwBlobSize = 0;
 		itemDef[i].pBlob = NULL;
 		itemDef[i].vtRequestedDataType = VT_EMPTY;
@@ -365,8 +364,6 @@ int COPCGroup::addItems(std::vector<std::string>& itemName, std::vector<COPCItem
 		throw OPCException("Failed to add items");
 	}
 
-
-
 	int errorCount = 0;
 	for (i = 0; i < noItems; i++){
 		if(itemDetails[i].pBlob){ 
@@ -384,15 +381,11 @@ int COPCGroup::addItems(std::vector<std::string>& itemName, std::vector<COPCItem
 		}
 	}
 
-
 	COPCClient::comFree(itemDetails);
 	COPCClient::comFree(itemResult);
 
 	return errorCount;
 }
-
-
-
 
 void COPCGroup::enableAsynch(IAsynchDataCallback &handler){
 	if (!asynchDataCallBackHandler == false){
@@ -427,9 +420,6 @@ void COPCGroup::enableAsynch(IAsynchDataCallback &handler){
 	userAsynchCBHandler = &handler;
 }
 
-
-
-
 void COPCGroup::setState(DWORD reqUpdateRate_ms, DWORD &returnedUpdateRate_ms, float deadBand, BOOL active){
 	HRESULT result = iStateManagement->SetState(&reqUpdateRate_ms, &returnedUpdateRate_ms, &active,0, &deadBand,0,0);
 	if (FAILED(result))
@@ -437,9 +427,6 @@ void COPCGroup::setState(DWORD reqUpdateRate_ms, DWORD &returnedUpdateRate_ms, f
 		throw OPCException("Failed to set group state");
 	}
 }
-
-
-
 
 void COPCGroup::disableAsynch(){
 	if (asynchDataCallBackHandler == NULL){

@@ -70,7 +70,7 @@ void CRemoteHost::makeRemoteObject(const IID requestedClass, const IID requested
 	reqInterface.hr = S_OK;
 
 	HRESULT result = CoCreateInstanceEx(requestedClass,NULL, CLSCTX_REMOTE_SERVER,
-	                                    &remoteServerInfo, 1, &reqInterface);
+										&remoteServerInfo, 1, &reqInterface);
 
 	if (FAILED(result))
 	{
@@ -112,7 +112,7 @@ CLSID CRemoteHost::GetCLSIDFromRemoteRegistry(const std::string& hostName, const
 				LPOLESTR sz = A2W(classIdString);
 				if (CLSIDFromString(sz, &classId) != S_OK)
 				{
-					printf("Failed sz:(%s) classIdString(%s)\n", sz, classIdString);
+					printf("Failed sz:(%ls) classIdString(%s)\n", sz, classIdString);
 				}
 			}
 		}

@@ -26,7 +26,7 @@ Boston, MA  02111-1307, USA.
 
 
 COPCItem::COPCItem(std::string &itemName, COPCGroup &g):
-name(itemName), group(g){
+group(g),name(itemName){
 }
 
 
