@@ -33,17 +33,17 @@ class COPCGroup;
 * Provides wrapper for operations that typically exist at the group level (e.g. reads) (it is at this level
 * that OPC supports the operation) however, we provide the operation at this level for ease of use.
 */
-class  COPCItem  
+class  COPCItem
 {
 private:
 	OPCHANDLE serversItemHandle;
-    VARTYPE vtCanonicalDataType;
-    DWORD dwAccessRights;
+	VARTYPE vtCanonicalDataType;
+	DWORD dwAccessRights;
 
 	COPCGroup & group;
 
 	std::string name;
-	
+
 protected:
 	friend class COPCGroup;
 	// used to set data for the OPC item AFTER it has been created in the server.
@@ -73,11 +73,15 @@ public:
 
 	OPCHANDLE getHandle() const{
 		return serversItemHandle;
-	}	
+	}
 
 	const std::string & getName() const{
 		return name;
-	} 
+	}
+
+	VARTYPE getVarType() const{
+		return vtCanonicalDataType;
+	}
 
 	void getSupportedProperties(std::vector<CPropertyDescription> &desc);
 
