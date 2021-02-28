@@ -28,9 +28,6 @@ Boston, MA  02111-1307, USA.
 #include "OPCClient.h"
 #include "OPCGroup.h"
 
-
-
-
 /**
 * Holds status information about the server
 */
@@ -47,9 +44,6 @@ WORD wBuildNumber;
 std::string vendorInfo;
 } ServerStatus;
 
-
-
-
 /**
 * Local representation of a local or remote OPC server. Wrapper for the COM interfaces to the server.
 */
@@ -61,7 +55,6 @@ private:
 	*/
 	ATL::CComPtr<IOPCServer> iOpcServer;
 
-
 	/**
 	* Interface to the OPC server namespace
 	*/
@@ -71,7 +64,6 @@ private:
 	* interface to the properties maintained for each item in the server namespace
 	*/
 	ATL::CComPtr<IOPCItemProperties> iOpcProperties;
-
 
 	friend class COPCGroup;
 	/**
@@ -93,11 +85,8 @@ public:
 	* @param opcServerInterface passed form the OPCHost
 	*/
 	COPCServer(ATL::CComPtr<IOPCServer> &opcServerInterface);
-
-
 	virtual ~COPCServer();
 
-	
 	/**
 	* Browse the OPC servers namespace.
 	* This is currently done FLAT mode
@@ -105,13 +94,10 @@ public:
 	*/
 	void getItemNames(std::vector<std::string> & opcItemNames);
 
-
-
 	/**
 	* Get an OPC group. Caller owns
 	*/
 	COPCGroup *makeGroup(const std::string & groupName, bool active, unsigned long reqUpdateRate_ms, unsigned long &revisedUpdateRate_ms, float deadBand); 
-
 
 	/**
 	* get the current status of the server.

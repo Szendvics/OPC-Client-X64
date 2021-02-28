@@ -17,9 +17,6 @@ struct CPropertyDescription{
 	CPropertyDescription(DWORD i, std::string d, VARTYPE t):id(i),desc(d), type(t){};
 };
 
-
-
-
 /**
 * holds value for an OPC item property
 */

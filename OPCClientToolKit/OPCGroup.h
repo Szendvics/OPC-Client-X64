@@ -27,7 +27,6 @@ Boston, MA  02111-1307, USA.
 #include "OPCClient.h"
 #include "Transaction.h"
 
-
 /**
 * Forward decl.
 */
@@ -37,9 +36,6 @@ class COPCItem;
 * used internally to implement the asynch callback
 */
 class CAsynchDataCallback; 
-
-
-
 
 /**
 * Client sided abstraction of an OPC group, wrapping the COM interfaces to the group within the OPC server.
@@ -58,7 +54,6 @@ private:
 	*/
 	ATL::CComPtr<IConnectionPoint> iAsynchDataCallbackConnectionPoint;
 
-
 	/**
 	* handle given the group by the server
 	*/
@@ -68,7 +63,6 @@ private:
 	* The server this group belongs to
 	*/
 	COPCServer &opcServer;
-
 
 	/**
 	* Callback for asynch data at the group level
@@ -81,18 +75,15 @@ private:
 	*/
 	std::vector<COPCItem *> items;
 
-
 	/**
 	* Name of the group
 	*/
 	const std::string name;
 
-
 	/**
 	* Handle given to callback by server.
 	*/
 	DWORD callbackHandle;
-
 
 	/**
 	* Users hander to handle asynch data 
@@ -108,9 +99,7 @@ private:
 
 public:
 	COPCGroup(const std::string & groupName, bool active, unsigned long reqUpdateRate_ms, unsigned long &revisedUpdateRate_ms, float deadBand, COPCServer &server);
-
 	virtual ~COPCGroup();
-
 
 	COPCItem * addItem(std::string &itemName, bool active);
 
@@ -120,37 +109,30 @@ public:
 	*/
 	int addItems(std::vector<std::string>& itemName, std::vector<COPCItem *>& itemsCreated, std::vector<HRESULT>& errors, bool active);
 
-
 	/**
 	* enable Asynch IO
 	*/
 	void enableAsynch(IAsynchDataCallback &handler);
-
 
 	/**
 	* disable Asych IO 
 	*/
 	void disableAsynch();
 
-
 	/**
 	* set the group state values.
 	*/
 	void setState(DWORD reqUpdateRate_ms, DWORD &returnedUpdateRate_ms, float deadBand, BOOL active);
-
-
 
 	/**
 	* Read set of OPC items synchronously.
 	*/
 	void readSync(std::vector<COPCItem *>& items, COPCItem_DataMap &opcData, OPCDATASOURCE source);
 
-
 	/**
 	* Read a defined group of OPC item asynchronously
 	*/
 	CTransaction * readAsync(std::vector<COPCItem *>& items, ITransactionComplete *transactionCB = NULL);
-
 
 	/**
 	* Refresh is an asysnch operation.
@@ -160,17 +142,13 @@ public:
 	*/ 
 	CTransaction * refresh(OPCDATASOURCE source, ITransactionComplete *transactionCB = NULL);
 
-
-
 	ATL::CComPtr<IOPCSyncIO> & getSychIOInterface(){
 		return iSychIO;
 	}
 
-
 	ATL::CComPtr<IOPCAsyncIO2> & getAsych2IOInterface(){
 		return iAsych2IO;
 	}
-
 
 	ATL::CComPtr<IOPCItemMgt> &getItemManagementInterface(){
 		return iItemManagement;

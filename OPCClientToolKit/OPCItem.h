@@ -29,7 +29,6 @@ Boston, MA  02111-1307, USA.
 #include "OPCProperties.h"
 class COPCGroup;
 
-
 /**
 * Provides wrapper for operations that typically exist at the group level (e.g. reads) (it is at this level
 * that OPC supports the operation) however, we provide the operation at this level for ease of use.
@@ -53,27 +52,21 @@ protected:
 	// items may only be created by group.
 	COPCItem(std::string &itemName, COPCGroup &g);
 public:
-
 	virtual ~COPCItem();
 
 	void writeSync(VARIANT &data);
-
-
 	void readSync(OPCItemData &data, OPCDATASOURCE source);
-
 
 	/**
 	* returned transaction object is owned
 	*/
 	CTransaction * readAsynch(ITransactionComplete *transactionCB = NULL);
 
-
 	/**
 	* returned transaction object is owned
 	*/
 	CTransaction * writeAsynch(VARIANT &data, ITransactionComplete *transactionCB = NULL);
 
-	
 	DWORD getAccessRights() const{
 		return dwAccessRights;
 	}
@@ -88,7 +81,6 @@ public:
 
 	void getSupportedProperties(std::vector<CPropertyDescription> &desc);
 
-	
 	/**
 	* retreive the OPC item properties for the descriptors passed. Any data previously existing in propsRead will be destroyed.
 	*/

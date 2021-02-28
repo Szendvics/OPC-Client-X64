@@ -1,7 +1,4 @@
-
-
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
 
  /* File created by MIDL compiler version 8.00.0603 */
 /* at Mon May 23 14:10:22 2016
@@ -89,5 +86,3 @@ OpcServerList;
 #endif
 
 #endif
-
-

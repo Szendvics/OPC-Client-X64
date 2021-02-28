@@ -1,7 +1,4 @@
-
-
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
 
  /* File created by MIDL compiler version 8.00.0603 */
 /* at Mon May 23 14:09:26 2016
@@ -680,17 +677,6 @@ EXTERN_C const IID IID_IOPCServerList2;
 /* library OPCCOMN */
 /* [helpstring][version][uuid] */ 
 
-
-
-
-
-
-
-
-
-
-
-
 EXTERN_C const IID LIBID_OPCCOMN;
 #endif /* __OPCCOMN_LIBRARY_DEFINED__ */
 
@@ -703,5 +689,3 @@ EXTERN_C const IID LIBID_OPCCOMN;
 #endif
 
 #endif
-
-

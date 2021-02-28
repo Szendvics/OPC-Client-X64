@@ -21,13 +21,11 @@ Boston, MA  02111-1307, USA.
 #if !defined(AFX_OPCCLIENT_H__1C1AA002_F7C5_4537_B569_8352FBA27544__INCLUDED_)
 #define AFX_OPCCLIENT_H__1C1AA002_F7C5_4537_B569_8352FBA27544__INCLUDED_
 
-
 #ifdef OPCCLIENTTOOLKITDLL_EXPORTS
 #define OPCCLIENTTOOLKITDLL_API __declspec(dllexport)
 #else
 #define OPCCLIENTTOOLKITDLL_API __declspec(dllimport)
 #endif 
-
 
 #if _MSC_VER > 1000
 #pragma once
@@ -42,12 +40,10 @@ Boston, MA  02111-1307, USA.
 #include "opcda.h"
 #include "OPCItemData.h"
 
-
 class COPCHost;
 class COPCServer;
 class COPCGroup;
 class COPCItem;
-
 
 /**
 * Basic OPC expection
@@ -63,8 +59,6 @@ public:
 	}
 };
 
-
-
 /**
 * Data received from the OnDataChange() method of the CAsynchDataCallback instance is delegated to an instance 
 * of a child class implementing this interface. The Child class must obviously provide the desired behaviour
@@ -76,17 +70,6 @@ class IAsynchDataCallback
 public:
 	virtual void OnDataChange(COPCGroup & group, CAtlMap<COPCItem *, OPCItemData *> & changes) = 0;
 };
-
-
-
-
-
-
-
-
-
-
-
 
 /**
 * Starting point for 'everything'. Utility class that creates host objects and handles COM memory management. 
@@ -103,11 +86,8 @@ public:
 	static int count;
 
 	static void init(OPCOLEInitMode mode=APARTMENTTHREADED);
-	
 	static void stop();
-
 	static void comFree(void *memory);
-
 	static void comFreeVariant(VARIANT *memory, unsigned size);
 
 	/**
@@ -117,14 +97,8 @@ public:
 	*/
 	static COPCHost * makeHost(const std::string &hostName);
 
-
 	static const GUID CATID_OPCDAv10;
-
 	static const GUID CATID_OPCDAv20;
 };
-
-
-
-
 
 #endif // !defined(AFX_OPCCLIENT_H__1C1AA002_F7C5_4537_B569_8352FBA27544__INCLUDED_)

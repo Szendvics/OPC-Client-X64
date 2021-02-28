@@ -9,4 +9,3 @@
 #else
 #define OPCCLIENTTOOLKITDLL_API __declspec(dllimport)
 #endif
-

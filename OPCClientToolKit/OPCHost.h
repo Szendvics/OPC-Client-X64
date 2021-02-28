@@ -37,7 +37,6 @@ public:
 	COPCHost();
 	virtual ~COPCHost();
 
-
 	/**
 	*  browse OPC servers on this host
 	* @param cid the version of the OPC servers to browse
@@ -51,11 +50,8 @@ public:
 	* Connect to OPC Data Access server on this host
 	*/
 	virtual COPCServer* connectDAServer(const std::string & serverProgID) = 0;
-
 	virtual COPCServer* connectDAServer(const CLSID& clsid) = 0;
 };
-
-
 
 /**
 * Used for accessing OPC servers on a remote host. Make use of OPCenum to browse servers.
@@ -67,18 +63,15 @@ private:
 	*/
 	std::string host;
 
-
 	/**
 	* util object to create remote COM object
 	*/
 	void makeRemoteObject(const IID requestedClass, const IID requestedInterface, void** interfacePtr);
 
-
 	CLSID GetCLSIDFromRemoteRegistry(const std::string & hostName, const std::string &progID);
 
 public:
 	CRemoteHost(const std::string & hostName);
-
 
 	/**
 	*  browse OPC servers on this host
@@ -101,7 +94,6 @@ public:
 	*/
 	COPCServer * connectDAServer(const CLSID & serverClassID);
 };
-
 
 /**
 * Used for accessing OPC servers on a local (this) host. Uses the Component Categories manger to enumerate 

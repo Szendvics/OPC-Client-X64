@@ -1,7 +1,4 @@
-
-
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
 
  /* File created by MIDL compiler version 8.00.0603 */
 /* at Mon May 23 14:09:33 2016
@@ -3722,5 +3719,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VAR
 #endif
 
 #endif
-
-

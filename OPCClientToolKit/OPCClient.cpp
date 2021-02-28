@@ -65,9 +65,6 @@ void COPCClient::init(OPCOLEInitMode mode)
 	++count;
 }
 
-
-
-
 void COPCClient::stop()
 {
 	--count;
@@ -79,14 +76,9 @@ void COPCClient::stop()
 	CoUninitialize();
 }
 
-
-
-
-
 void COPCClient::comFree(void *memory){
 	iMalloc->Free(memory);
 }
-
 
 void COPCClient::comFreeVariant(VARIANT *memory, unsigned size){
 	for (unsigned i = 0; i < size; i++){
@@ -95,13 +87,9 @@ void COPCClient::comFreeVariant(VARIANT *memory, unsigned size){
 	iMalloc->Free(memory);
 }
 
-
-
 COPCHost * COPCClient::makeHost(const std::string &hostName){
 	if (hostName.size()==0){
 		return new CLocalHost();
 	}
-	
 	return new CRemoteHost(hostName);
 }
-

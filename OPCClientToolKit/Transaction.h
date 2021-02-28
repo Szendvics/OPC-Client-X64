@@ -5,8 +5,6 @@
 
 class CTransaction;
 
-
-
 /**
 * Interface which provides means by which the client can be notified when an asynchronous operation
 * is completed. The implementer must implement this interface overriding the complete method to provide
@@ -18,16 +16,11 @@ public:
 	virtual void complete(CTransaction &transaction) = 0;
 };
 
-
-
-
-
 /**
 * Used to indicate completion of an asynchronous operation. 
 * Will contain the results of that operation.
 */
 class CTransaction{
-
 	/**
 	* Optional transation complete callback - not owned
 	*/
@@ -35,10 +28,7 @@ class CTransaction{
 
 	// true when the transaction has completed
 	bool completed;
-	
-
 	DWORD cancelID;
-
 
 public:
 	/**
@@ -55,19 +45,13 @@ public:
 	*/
 	CTransaction(std::vector<COPCItem *>&items, ITransactionComplete * completeCB);
 
-
-	
 	void setItemError(COPCItem *item, HRESULT error);
-
-
 	void setItemValue(COPCItem *item, FILETIME time, WORD qual, VARIANT & val, HRESULT err);
-
 
 	/**
 	* return Value stored for a given opc item.
 	*/
 	const OPCItemData * getItemValue(COPCItem *item) const;
-			
 
 	/**
 	* trigger completion of the transaction.
