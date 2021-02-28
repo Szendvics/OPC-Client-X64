@@ -26,6 +26,7 @@ Boston, MA  02111-1307, USA.
 #endif // _MSC_VER > 1000
 #include "OPCClient.h"
 #include "Transaction.h"
+#include <map>
 
 /**
 * Forward decl.

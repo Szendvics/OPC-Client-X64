@@ -118,7 +118,7 @@ CTransaction * COPCItem::readAsynch(ITransactionComplete *transactionCB){
 	return group.readAsync(items, transactionCB);
 }
 
-
+extern std::map<DWORD, uintptr_t> transactionPointers;
 
 CTransaction * COPCItem::writeAsynch(VARIANT &data, ITransactionComplete *transactionCB){
 	DWORD cancelID;
@@ -126,6 +126,7 @@ CTransaction * COPCItem::writeAsynch(VARIANT &data, ITransactionComplete *transa
 	std::vector<COPCItem *> items;
 	items.push_back(this);
 	CTransaction * trans = new CTransaction(items,transactionCB);
+	transactionPointers[(DWORD)trans] = (uintptr_t)trans;
 
 	HRESULT result = group.getAsych2IOInterface()->Write(1,&serversItemHandle,&data,(DWORD)trans,&cancelID,&individualResults); 
 	

@@ -21,10 +21,7 @@ Boston, MA  02111-1307, USA.
 #include "OPCServer.h"
 #include "OPCGroup.h"
 #include "OPCItem.h"
-
-
-
-
+std::map<DWORD, uintptr_t> transactionPointers;
 
 /**
 * Handles OPC (DCOM) callbacks at the group level. It deals with the receipt of data from asynchronous operations.
@@ -74,11 +71,9 @@ public:
 		return S_OK;
 	}
 
-
 	STDMETHODIMP_(ULONG) AddRef(){
 		return ++mRefCount;
 	}
-
 
 	STDMETHODIMP_(ULONG) Release(){
 		--mRefCount; 
@@ -101,7 +96,7 @@ public:
 
 		if (Transid != 0){
 			// it is a result of a refresh (see p106 of spec)
-			CTransaction & trans = *(CTransaction *)Transid; 
+			CTransaction& trans = *(CTransaction*)transactionPointers[Transid];
 			updateOPCData(trans.opcData, count, clienthandles, values,quality,time,errors);
 			trans.setCompleted();	
 			return S_OK;	
@@ -115,26 +110,21 @@ public:
 		return S_OK;
 	}
 
-
 	STDMETHODIMP OnReadComplete(DWORD Transid, OPCHANDLE grphandle, 
 		HRESULT masterquality, HRESULT mastererror, DWORD count, 
 		OPCHANDLE * clienthandles, VARIANT* values, WORD * quality,
 		FILETIME * time, HRESULT * errors)
 	{
-		// TODO this is bad  - server could corrupt address - need to use look up table
-		CTransaction & trans = *(CTransaction *)Transid; 
+		CTransaction& trans = *(CTransaction*)transactionPointers[Transid];
 		updateOPCData(trans.opcData, count, clienthandles, values,quality,time,errors);
 		trans.setCompleted();
 		return S_OK;
 	}
 
-
 	STDMETHODIMP OnWriteComplete(DWORD Transid, OPCHANDLE grphandle, HRESULT mastererr, 
 		DWORD count, OPCHANDLE * clienthandles, HRESULT * errors)
 	{
-		// TODO this is bad  - server could corrupt address - need to use look up table
-		CTransaction & trans = *(CTransaction *)Transid; 
-
+		CTransaction& trans = *(CTransaction*)transactionPointers[Transid];
 		// see page 145 - number of items returned may be less than sent
 		for (unsigned i = 0; i < count; i++){
 			// TODO this is bad  - server could corrupt address - need to use look up table
@@ -146,13 +136,10 @@ public:
 		return S_OK;
 	}
 
-
-
 	STDMETHODIMP OnCancelComplete(DWORD transid, OPCHANDLE grphandle){
 		printf("OnCancelComplete: Transid=%ld GrpHandle=%ld\n", transid, grphandle);
 		return S_OK;
 	}
-
 
 	/**
 	* make OPC item
@@ -287,6 +274,7 @@ CTransaction * COPCGroup::readAsync(std::vector<COPCItem *>& items, ITransaction
 		CTransaction * trans = new CTransaction(items,transactionCB);
 		OPCHANDLE *serverHandles = buildServerHandleList(items);
 		DWORD noItems = (DWORD)items.size();
+		transactionPointers[(DWORD)trans] = (uintptr_t)trans;
 
 		HRESULT result = iAsych2IO->Read(noItems, serverHandles, (DWORD)trans, &cancelID, &individualResults);
 		delete [] serverHandles;
@@ -317,6 +305,7 @@ CTransaction * COPCGroup::readAsync(std::vector<COPCItem *>& items, ITransaction
 CTransaction * COPCGroup::refresh(OPCDATASOURCE source, ITransactionComplete *transactionCB){
 	DWORD cancelID;
 	CTransaction * trans = new CTransaction(items, transactionCB);
+	transactionPointers[(DWORD)trans] = (uintptr_t)trans;
 
 	HRESULT result = iAsych2IO->Refresh2(source, (DWORD)trans, &cancelID);
 	if (FAILED(result)){
