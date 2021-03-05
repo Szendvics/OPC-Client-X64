@@ -62,7 +62,7 @@ set(OtherFiles
 
 )
 
-
+find_package(Qt5 COMPONENTS Core REQUIRED)
 AddLibraryTarget(
     TargetName              ${PROJECT_NAME}
 
